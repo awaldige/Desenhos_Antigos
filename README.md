@@ -1,77 +1,123 @@
-# 📌 Banco de Dados: Desenhos MIT (Anos 70 a 90)
+📺 Desenhos Antigos — Banco de Dados + Catálogo Visual
+📖 Visão Geral
 
-## 📖 Visão Geral
-Este banco de dados foi projetado para armazenar e gerenciar informações sobre **desenhos animados clássicos das décadas de 1970, 1980 e 1990**.  
-Ele permite organizar dados sobre séries, temporadas, episódios, plataformas de streaming e avaliações dos usuários.
+Este projeto organiza informações sobre desenhos animados clássicos das décadas de 70, 80 e 90, permitindo armazenar e consultar dados sobre séries, temporadas, personagens e plataformas de streaming.
 
-O objetivo é facilitar consultas e preservar informações sobre produções icônicas da animação.
+Além do banco de dados, o projeto agora possui uma interface visual estilo streaming, permitindo navegar pelos desenhos de forma moderna e intuitiva.
 
----
+O objetivo é preservar e facilitar o acesso a informações sobre animações clássicas.
 
-## 🏗️ Estrutura do Banco de Dados
+🏗️ Estrutura do Projeto
 
-O banco de dados é composto pelas seguintes tabelas:
+O repositório contém:
 
-### 🎬 desenhos
-Armazena informações principais sobre cada desenho:
-- Título
-- Ano de lançamento
-- Descrição
+🗄️ Banco de Dados (MySQL)
 
-### 📅 temporadas
-Registra as temporadas de cada desenho:
-- Ano de lançamento
-- Quantidade total de episódios
+Banco relacional contendo:
 
-### 📺 episodios
-Contém detalhes de cada episódio:
-- Título
-- Número do episódio
-- Duração
+Estúdios
 
-### 🌐 plataformas
-Lista as plataformas de streaming disponíveis.
+Criadores
 
-### 📡 streaming
-Tabela de relacionamento indicando em quais plataformas cada desenho está disponível.
+Desenhos
 
-### ⭐ avaliacoes
-Armazena avaliações e notas fornecidas pelos usuários para cada desenho.
+Temporadas
 
----
+Personagens
 
-## 🔗 Relacionamentos
+Premiações
 
-O modelo de dados permite:
+Plataformas de streaming
 
-- Um desenho possuir várias temporadas.
-- Cada temporada conter múltiplos episódios.
-- Um desenho estar disponível em várias plataformas.
-- Usuários registrarem avaliações para cada desenho.
+Relacionamentos entre dados
 
----
+Arquivo principal:
 
-## 📊 Funcionalidades Principais
+desenhos_antigos.sql
 
-✔️ Consultar desenhos clássicos das décadas de 70, 80 e 90.  
-✔️ Verificar em quais plataformas assistir aos desenhos.  
-✔️ Visualizar e inserir avaliações de usuários.  
-✔️ Organizar informações históricas sobre animações.
+🌐 Interface Visual
 
----
+Uma interface web permite visualizar os desenhos em formato de catálogo estilo streaming:
 
-## 🚀 Uso
+Banner de destaque
 
-Este banco de dados pode ser utilizado por:
+Lista de desenhos em cards
 
-- Fãs de animações retrô
-- Pesquisadores e colecionadores
-- Projetos educacionais
-- Sites ou aplicativos sobre cultura pop e animações clássicas
+Navegação visual
 
-Seu propósito é facilitar o armazenamento e consulta de dados sobre produções marcantes da animação mundial.
+Layout moderno escuro
 
----
+Arquivos principais:
 
-## 📜 Licença
-Projeto de uso livre para fins educacionais e organizacionais.
+index.html
+style.css
+script.js
+
+⚙️ API
+
+Pequena API em PHP utilizada para ler os dados do banco e exibir no site.
+
+api/desenhos.php
+
+🔗 Modelo de Dados
+
+O banco permite:
+
+Um desenho possuir várias temporadas.
+
+Cada desenho possuir vários personagens.
+
+Um desenho estar disponível em várias plataformas.
+
+Registro de premiações e criadores.
+
+📊 Funcionalidades Atuais
+
+✔️ Catálogo visual de desenhos
+✔️ Banco relacional organizado
+✔️ Consulta de dados via API
+✔️ Projeto navegável para portfólio
+
+🚀 Possíveis Evoluções
+
+Planejado para futuras melhorias:
+
+Página de detalhes do desenho
+
+Lista de personagens
+
+Temporadas e episódios
+
+Busca por desenho
+
+Favoritos
+
+Painel administrativo
+
+Versão responsiva para celular
+
+🧪 Como usar
+
+Importar o banco desenhos_antigos.sql no MySQL.
+
+Configurar conexão no arquivo api/desenhos.php.
+
+Abrir o projeto em um servidor local (XAMPP, WAMP etc).
+
+Abrir index.html no navegador.
+
+🎯 Objetivo do Projeto
+
+Servir como:
+
+Projeto de portfólio
+
+Catálogo de animações clássicas
+
+Base para sistemas de streaming retrô
+
+Projeto educacional de banco + frontend
+
+📜 Licença
+
+Projeto livre para fins educacionais e experimentais.
