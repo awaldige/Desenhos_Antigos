@@ -1,63 +1,77 @@
-📌 Banco de Dados: Streaming de Desenhos
-📖 Visão Geral
-Este banco de dados foi projetado para gerenciar informações sobre desenhos animados disponíveis em uma plataforma de streaming. Ele armazena dados sobre os desenhos, suas temporadas, episódios, plataformas onde estão disponíveis e avaliações dos usuários.
+# 📌 Banco de Dados: Desenhos MIT (Anos 70 a 90)
 
-🏗️ Estrutura do Banco de Dados
-O banco de dados contém as seguintes tabelas:
+## 📖 Visão Geral
+Este banco de dados foi projetado para armazenar e gerenciar informações sobre **desenhos animados clássicos das décadas de 1970, 1980 e 1990**.  
+Ele permite organizar dados sobre séries, temporadas, episódios, plataformas de streaming e avaliações dos usuários.
 
-desenhos: Registra os desenhos animados, incluindo título, ano de lançamento e descrição.
-temporadas: Contém informações sobre as temporadas de cada desenho, como ano de lançamento e número total de episódios.
-episodios: Armazena detalhes de cada episódio, como título, duração e número do episódio.
-streaming: Relaciona os desenhos às plataformas onde estão disponíveis.
-plataformas: Lista as plataformas de streaming e seus detalhes.
-avaliacoes: Guarda as avaliações dos usuários sobre os desenhos.
-🔗 Relacionamentos
-Cada desenho pode ter várias temporadas.
-Cada temporada pode conter vários episódios.
-Um desenho pode estar disponível em várias plataformas de streaming.
-Usuários podem adicionar avaliações para cada desenho.
-📊 Funcionalidades Principais
-✔️ Consultar desenhos e suas temporadas/episódios.
-✔️ Verificar onde um desenho está disponível para streaming.
-✔️ Inserir e visualizar avaliações dos usuários.
+O objetivo é facilitar consultas e preservar informações sobre produções icônicas da animação.
 
-🚀 Uso
-Esse banco de dados é ideal para plataformas que gerenciam conteúdos de desenhos animados, facilitando a busca, organização e avaliação dos títulos disponíveis.
+---
 
-Se precisar de mais ajustes ou informações, é só avisar! 😊
+## 🏗️ Estrutura do Banco de Dados
 
+O banco de dados é composto pelas seguintes tabelas:
 
+### 🎬 desenhos
+Armazena informações principais sobre cada desenho:
+- Título
+- Ano de lançamento
+- Descrição
 
+### 📅 temporadas
+Registra as temporadas de cada desenho:
+- Ano de lançamento
+- Quantidade total de episódios
 
+### 📺 episodios
+Contém detalhes de cada episódio:
+- Título
+- Número do episódio
+- Duração
 
+### 🌐 plataformas
+Lista as plataformas de streaming disponíveis.
 
-Você disse:
-modificar  e dizer desenhos anos 70 a 90  e  mit
-O ChatGPT disse:
-Aqui está o README ajustado conforme sua solicitação:
+### 📡 streaming
+Tabela de relacionamento indicando em quais plataformas cada desenho está disponível.
 
-📌 Banco de Dados: Desenhos MIT (Anos 70 a 90)
-📖 Visão Geral
-Este banco de dados foi projetado para armazenar e gerenciar informações sobre desenhos animados clássicos das décadas de 1970, 1980 e 1990. Ele permite organizar dados sobre os desenhos, suas temporadas, episódios, plataformas de streaming e avaliações dos usuários.
+### ⭐ avaliacoes
+Armazena avaliações e notas fornecidas pelos usuários para cada desenho.
 
-🏗️ Estrutura do Banco de Dados
-O banco de dados contém as seguintes tabelas:
+---
 
-desenhos: Lista os desenhos icônicos lançados entre os anos 70 e 90, incluindo título, ano de lançamento e descrição.
-temporadas: Registra as temporadas de cada desenho, com ano de lançamento e total de episódios.
-episodios: Armazena detalhes dos episódios, como título, número e duração.
-streaming: Indica em quais plataformas os desenhos estão disponíveis.
-plataformas: Contém informações sobre as plataformas de streaming.
-avaliacoes: Guarda avaliações e notas dos usuários para cada desenho.
-🔗 Relacionamentos
-Um desenho pode ter várias temporadas.
-Cada temporada possui múltiplos episódios.
-Os desenhos podem estar disponíveis em diversas plataformas de streaming.
-Usuários podem adicionar avaliações para cada desenho.
-📊 Funcionalidades Principais
-✔️ Consultar desenhos clássicos das décadas de 70 a 90.
-✔️ Verificar onde assistir aos desenhos.
-✔️ Visualizar e inserir avaliações de usuários.
+## 🔗 Relacionamentos
 
-🚀 Uso
-Esse banco de dados é ideal para fãs de animações retrô e pesquisadores interessados em desenhos animados das décadas de 70, 80 e 90, ajudando a preservar e organizar informações sobre essas produções icônicas.
+O modelo de dados permite:
+
+- Um desenho possuir várias temporadas.
+- Cada temporada conter múltiplos episódios.
+- Um desenho estar disponível em várias plataformas.
+- Usuários registrarem avaliações para cada desenho.
+
+---
+
+## 📊 Funcionalidades Principais
+
+✔️ Consultar desenhos clássicos das décadas de 70, 80 e 90.  
+✔️ Verificar em quais plataformas assistir aos desenhos.  
+✔️ Visualizar e inserir avaliações de usuários.  
+✔️ Organizar informações históricas sobre animações.
+
+---
+
+## 🚀 Uso
+
+Este banco de dados pode ser utilizado por:
+
+- Fãs de animações retrô
+- Pesquisadores e colecionadores
+- Projetos educacionais
+- Sites ou aplicativos sobre cultura pop e animações clássicas
+
+Seu propósito é facilitar o armazenamento e consulta de dados sobre produções marcantes da animação mundial.
+
+---
+
+## 📜 Licença
+Projeto de uso livre para fins educacionais e organizacionais.
