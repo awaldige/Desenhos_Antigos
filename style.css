@@ -1,190 +1,311 @@
 /* ===== 1. RESET E BASE ===== */
-* { box-sizing: border-box; } /* Impede que os elementos "estourem" o tamanho */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
 
 body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background: #141414;
     color: white;
     overflow-x: hidden;
+    line-height: 1.5;
 }
 
-/* ===== 2. CABEÇALHO E BANNER ===== */
-h1 {
+/* ===== 2. CABEÇALHO ===== */
+header {
     background: #000;
-    margin: 0;
-    padding: 18px 30px;
-    color: #e50914;
+    padding: 15px 4%;
     position: sticky;
     top: 0;
     z-index: 100;
-    font-size: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     box-shadow: 0 2px 10px rgba(0,0,0,0.8);
 }
 
+header h1 {
+    color: #e50914;
+    font-size: 26px;
+    letter-spacing: -1px;
+}
+
+#btnLogar, #btnSair {
+    background: transparent;
+    border: 1px solid #e50914;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+#btnLogar:hover { background: #e50914; }
+#btnSair { border-color: #555; color: #aaa; }
+#btnSair:hover { background: #333; color: white; }
+
+/* ===== 3. BANNER DINÂMICO & PLAYER ===== */
 #banner {
-    height: 400px;
+    height: 75vh; /* Ocupa 75% da altura da tela */
+    min-height: 400px;
     background-size: cover;
     background-position: center;
     position: relative;
     display: flex;
-    align-items: flex-end;
-    padding: 20px;
-    transition: background-image 0.5s ease-in-out;
+    align-items: center;
+    padding: 0 4%;
+    transition: background-image 0.6s ease-in-out;
+    background-color: #000;
 }
 
+/* Gradiente para escurecer o banner e destacar o texto */
 #banner::before {
     content: "";
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to top, #141414, transparent);
+    background: linear-gradient(to right, #141414 10%, transparent 60%),
+                linear-gradient(to top, #141414, transparent);
+    z-index: 1;
 }
 
 #banner-info {
     position: relative;
-    z-index: 2;
-    max-width: 600px;
-    background: rgba(0,0,0,0.6);
-    padding: 15px;
-    border-radius: 8px;
+    z-index: 10;
+    max-width: 550px;
 }
 
-/* ===== 3. CONTROLES (Busca e Botão) ===== */
+#banner-titulo {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+#banner-desc {
+    font-size: 1.1rem;
+    color: #ccc;
+    margin-bottom: 20px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Container que recebe o Iframe do YouTube */
+#player-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    background: #000;
+}
+
+#player-container iframe, 
+#player-container video {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Botão de Assistir no Banner */
+#btnAssistir {
+    background: #e50914;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: none; /* Controlado pelo JS */
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s, background 0.2s;
+}
+
+#btnAssistir:hover {
+    background: #ff0a16;
+    transform: scale(1.05);
+}
+
+/* ===== 4. CONTROLES E BUSCA ===== */
 .controles-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 25px;
-    gap: 15px;
+    padding: 30px 4%;
+    gap: 20px;
 }
 
 #inputBusca {
     flex-grow: 1;
-    max-width: 500px;
-    padding: 12px 20px;
+    max-width: 600px;
+    padding: 12px 25px;
     border-radius: 25px;
     border: 1px solid #333;
     background: #111;
     color: white;
+    font-size: 1rem;
     outline: none;
+    transition: border 0.3s;
 }
+
+#inputBusca:focus { border-color: #e50914; }
 
 #btnAbrirModal {
     background: #e50914;
     color: white;
     border: none;
-    padding: 12px 20px;
+    padding: 12px 25px;
     border-radius: 5px;
     font-weight: bold;
     cursor: pointer;
+    white-space: nowrap;
 }
 
-/* ===== 4. GRID DE CARDS (Seu padrão original) ===== */
+/* ===== 5. GRID DE DESENHOS ===== */
+.categoria {
+    margin: 20px 4% 10px;
+    font-size: 1.5rem;
+    color: #e5e5e5;
+}
+
 #lista {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 18px;
-    padding: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 0 4% 40px;
 }
 
 .card {
     background: #1f1f1f;
-    border-radius: 10px;
+    border-radius: 4px;
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.3s ease;
+    position: relative;
 }
 
-.card:hover { transform: scale(1.05); }
+.card:hover { 
+    transform: scale(1.08); 
+    z-index: 2;
+}
 
 .card img {
     width: 100%;
-    height: 280px;
+    aspect-ratio: 2/3;
     object-fit: cover;
 }
 
-.card .info { padding: 12px; }
-
-.acoes { display: flex; gap: 5px; margin-top: 10px; }
-.acoes button {
-    background: #333; border: none; color: white;
-    padding: 5px 10px; border-radius: 4px; cursor: pointer;
+.card .info {
+    padding: 10px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
 }
 
-/* ===== 5. MODAL (Onde o tamanho estava "gigante") ===== */
+.card h3 { font-size: 0.9rem; margin-bottom: 5px; }
+.card p { font-size: 0.8rem; color: #888; }
+
+.acoes { 
+    display: flex; 
+    gap: 5px; 
+    margin-top: 8px; 
+}
+
+.acoes button {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    flex: 1;
+}
+
+.acoes button:hover { background: rgba(255,255,255,0.2); }
+
+/* ===== 6. MODAIS ===== */
 .modal {
     display: none;
     position: fixed;
-    z-index: 1000;
+    z-index: 2000;
     left: 0; top: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(5px);
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
 }
 
 .modal-content {
     background: #181818;
-    margin: 2% auto; /* Diminuí a margem do topo */
-    padding: 20px;
+    margin: 5vh auto;
+    padding: 30px;
     width: 90%;
-    max-width: 450px; /* Limitei a largura para não ficar gigante */
+    max-width: 480px;
     border-radius: 10px;
     position: relative;
+    border: 1px solid #333;
+    max-height: 90vh;
+    overflow-y: auto;
 }
+
+/* Custom Scrollbar */
+.modal-content::-webkit-scrollbar { width: 8px; }
+.modal-content::-webkit-scrollbar-thumb { background: #e50914; border-radius: 4px; }
 
 .fechar {
     position: absolute;
-    right: 15px; top: 10px;
-    font-size: 24px; cursor: pointer; color: #888;
+    right: 20px; top: 15px;
+    font-size: 28px;
+    color: #666;
+    cursor: pointer;
 }
 
-/* ===== 6. FORMULÁRIO DENTRO DO MODAL ===== */
-#formDesenho {
-    display: flex;
-    flex-direction: column;
-    gap: 12px; /* Espaço controlado entre campos */
-}
-
+/* ===== 7. FORMULÁRIOS ===== */
 .grupo-input {
+    margin-bottom: 15px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
 }
 
-.grupo-input label { font-size: 13px; color: #aaa; }
+.grupo-input label {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 5px;
+}
 
-#formDesenho input, 
-#formDesenho textarea {
-    padding: 10px;
-    background: #222;
+input, textarea {
+    padding: 12px;
+    background: #2b2b2b;
     border: 1px solid #444;
     color: white;
-    border-radius: 5px;
+    border-radius: 4px;
+    font-size: 1rem;
 }
+
+input:focus { border-color: #e50914; outline: none; }
 
 #btnEnviar {
     background: #e50914;
     color: white;
     border: none;
-    padding: 12px;
+    padding: 14px;
     font-weight: bold;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
 }
 
-/* Preview de imagem controlado */
-#img-preview {
-    width: 100%;
-    max-height: 150px;
-    object-fit: contain;
-    margin-top: 10px;
-    border-radius: 5px;
-    background: #000;
-}
+/* ===== 8. UTILITÁRIOS E RESPONSIVO ===== */
+.admin-only { display: none !important; }
+body.is-admin .admin-only { display: flex !important; }
+body.is-admin button#btnAbrirModal.admin-only { display: block !important; }
 
-/* ===== 7. RESPONSIVO ===== */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    #banner { height: 50vh; }
+    #banner-titulo { font-size: 2rem; }
     .controles-container { flex-direction: column; }
-    #inputBusca { width: 100%; }
-    #banner { height: 250px; }
+    #lista { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 }
