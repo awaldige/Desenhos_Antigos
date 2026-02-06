@@ -1,0 +1,59 @@
+<?php
+mysqli_report(MYSQLI_REPORT_OFF);
+header("Content-Type: application/json; charset=utf-8");
+
+$conn = @new mysqli("localhost", "root", "", "desenhos_antigos", 3308);
+
+if ($conn->connect_error) {
+    echo json_encode(["sucesso" => false, "erro" => "Erro de conexão"]);
+    exit;
+}
+
+$id = $_POST["id"] ?? null;
+$nome = $_POST["nome"] ?? '';
+$ano = $_POST["ano"] ?? 0;
+$desc = $_POST["descricao"] ?? '';
+$video_url = $_POST["video_url"] ?? ''; // CAPTURA O VÍDEO
+$novaImagem = null;
+
+if (!$id) {
+    echo json_encode(["sucesso" => false, "erro" => "ID ausente"]);
+    exit;
+}
+
+// 1. Lógica para Processar Nova Imagem (se houver)
+if (!empty($_FILES["imagem"]["name"])) {
+    $pasta = "../imagens/";
+    
+    // Busca a imagem antiga para deletar o arquivo físico e economizar espaço
+    $res = $conn->query("SELECT imagem FROM desenhos WHERE id_desenho = " . (int)$id);
+    $antigo = $res->fetch_assoc();
+    if ($antigo && $antigo['imagem'] && file_exists($pasta . $antigo['imagem'])) {
+        unlink($pasta . $antigo['imagem']);
+    }
+
+    $ext = pathinfo($_FILES["imagem"]["name"], PATHINFO_EXTENSION);
+    $novaImagem = time() . "_" . uniqid() . "." . $ext;
+    move_uploaded_file($_FILES["imagem"]["tmp_name"], $pasta . $novaImagem);
+}
+
+// 2. Execução do UPDATE (considerando se a imagem mudou ou não)
+if ($novaImagem) {
+    // Atualiza tudo, incluindo a nova imagem e o vídeo
+    $stmt = $conn->prepare("UPDATE desenhos SET nome=?, ano_lancamento=?, descricao=?, imagem=?, video_url=? WHERE id_desenho=?");
+    $stmt->bind_param("sisssi", $nome, $ano, $desc, $novaImagem, $video_url, $id);
+} else {
+    // Atualiza apenas os textos e o vídeo, mantendo a imagem atual
+    $stmt = $conn->prepare("UPDATE desenhos SET nome=?, ano_lancamento=?, descricao=?, video_url=? WHERE id_desenho=?");
+    $stmt->bind_param("sissi", $nome, $ano, $desc, $video_url, $id);
+}
+
+$resultado = $stmt->execute();
+
+echo json_encode([
+    "sucesso" => $resultado,
+    "erro" => $resultado ? null : $stmt->error
+]);
+
+$stmt->close();
+$conn->close();
