@@ -1,29 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Desenhos Antigos</title>
-
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desenhos Antigos - Streaming</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-<h1>📺 Desenhos Antigos</h1>
+    <h1>📺 Desenhos Antigos</h1>
 </header>
 
 <section id="banner">
-<div id="banner-info">
-<h2 id="banner-titulo"></h2>
-<p id="banner-desc"></p>
-</div>
+    <div id="banner-info">
+        <h2 id="banner-titulo"></h2>
+        <p id="banner-desc"></p>
+    </div>
+</section>
+
+<section id="cadastro">
+    <h2>Adicionar Desenho</h2>
+    <form id="formDesenho" enctype="multipart/form-data">
+        <input type="text" id="nome" placeholder="Nome do desenho" required>
+        <input type="number" id="ano" placeholder="Ano de lançamento" required>
+        <input type="text" id="descricao" placeholder="Descrição" required>
+        
+        <input type="file" id="imagem" name="imagem" accept="image/*">
+        
+        <button type="submit">Adicionar</button>
+    </form>
 </section>
 
 <h2 class="categoria">Clássicos</h2>
 <section id="lista" class="linha"></section>
 
 <script src="script.js"></script>
-
 </body>
 </html>
