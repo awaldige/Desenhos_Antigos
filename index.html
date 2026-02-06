@@ -10,12 +10,22 @@
 
 <header>
     <h1>📺 Desenhos Antigos</h1>
+    <div id="auth-controls">
+        <button id="btnLogar" onclick="abrirModalLogin()">Cadeado 🔒</button>
+        <button id="btnSair" onclick="fazerLogout()" style="display:none;">Sair (ADM)</button>
+    </div>
 </header>
 
 <section id="banner">
-    <div id="banner-info">
+    <div id="player-container" style="display:none; width:100%; height:100%; position:absolute; top:0; left:0; z-index: 1;">
+        </div>
+
+    <div id="banner-info" style="z-index: 2;">
         <h2 id="banner-titulo">Bem-vindo</h2>
         <p id="banner-desc">Selecione um desenho abaixo para ver os detalhes.</p>
+        <button id="btnAssistir" onclick="iniciarVideo()" style="display:none; background:#e50914; color:white; border:none; padding:12px 25px; border-radius:5px; font-weight:bold; cursor:pointer; margin-top:15px; font-size:1.1rem;">
+            ▶ Assistir Agora
+        </button>
     </div>
 </section>
 
@@ -24,7 +34,25 @@
         <input type="text" id="inputBusca" placeholder="🔍 O que você quer assistir hoje?" oninput="filtrarDesenhos()">
     </section>
     
-    <button id="btnAbrirModal" onclick="abrirModal()">➕ Novo Desenho</button>
+    <button id="btnAbrirModal" class="admin-only" onclick="abrirModal()">➕ Novo Desenho</button>
+</div>
+
+<div id="modalLogin" class="modal">
+    <div class="modal-content" style="max-width: 350px;">
+        <span class="fechar" onclick="fecharModalLogin()">&times;</span>
+        <h2>Acesso ADM</h2>
+        <form id="formLogin">
+            <div class="grupo-input">
+                <label for="login_user">Usuário</label>
+                <input type="text" id="login_user" placeholder="Digite seu login" required>
+            </div>
+            <div class="grupo-input">
+                <label for="senha_user">Senha</label>
+                <input type="password" id="senha_user" placeholder="Digite sua senha" required>
+            </div>
+            <button type="submit" id="btnFazerLogin">Entrar</button>
+        </form>
+    </div>
 </div>
 
 <div id="modalCadastro" class="modal">
@@ -50,6 +78,11 @@
                 <div class="grupo-input">
                     <label for="descricao">Sinopse / Descrição</label>
                     <textarea id="descricao" rows="3" placeholder="Conte um pouco sobre o desenho..." required></textarea>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="video_url">URL do Vídeo (YouTube ou MP4)</label>
+                    <input type="text" id="video_url" name="video_url" placeholder="https://www.youtube.com/watch?v=...">
                 </div>
                 
                 <div class="file-input-wrapper">
