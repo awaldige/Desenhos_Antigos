@@ -1,35 +1,50 @@
 <?php
-// Impede avisos do PHP de quebrarem o formato JSON
-mysqli_report(MYSQLI_REPORT_OFF);
+// 1. Configurações de exibição de erros (ajuda a debugar no Render)
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 header("Content-Type: application/json; charset=utf-8");
 
-// Conexão com a porta 3308
-$conn = @new mysqli("localhost", "root", "", "desenhos_antigos", 3308);
+// 2. Dados do Aiven (Ajuste a senha se necessário)
+$host = "mysql-63c6648-streaming-desenhos.j.aivencloud.com";
+$port = 28840;
+$user = "avnadmin";
+$pass = "AVNS_y1R_KaHJC0qp4VAHb_k"; 
+$dbname = "defaultdb";
 
-if ($conn->connect_error) {
-    echo json_encode(["erro" => "Falha na conexão com o banco de dados"]);
+// 3. Inicializa a conexão com SSL (Obrigatório para o Aiven)
+$conn = mysqli_init();
+mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
+
+$conectar = @mysqli_real_connect($conn, $host, $user, $pass, $dbname, $port, NULL, MYSQLI_CLIENT_SSL);
+
+if (!$conectar) {
+    echo json_encode(["erro" => "Falha na conexão com Aiven: " . mysqli_connect_error()]);
     exit;
 }
 
-// Busca todos os desenhos
+// 4. Define o charset para não quebrar acentos
+mysqli_set_charset($conn, "utf8mb4");
+
+// 5. Busca todos os desenhos
 $sql = "SELECT * FROM desenhos ORDER BY id_desenho DESC";
-$result = $conn->query($sql);
+$result = mysqli_query($conn, $sql);
 
 $dados = [];
 
 if ($result) {
-    while ($row = $result->fetch_assoc()) {
+    while ($row = mysqli_fetch_assoc($result)) {
         $dados[] = [
             "id_desenho" => $row["id_desenho"],
             "nome" => $row["nome"],
             "ano_lancamento" => $row["ano_lancamento"],
             "descricao" => $row["descricao"] ?? "",
             "imagem" => $row["imagem"] ?? null,
-            "video_url" => $row["video_url"] ?? "" // <--- ESTA LINHA ESTAVA FALTANDO!
+            "video_url" => $row["video_url"] ?? ""
         ];
     }
 }
 
 echo json_encode($dados);
-$conn->close();
+mysqli_close($conn);
 ?>
