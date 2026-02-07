@@ -1,19 +1,33 @@
 <?php
-mysqli_report(MYSQLI_REPORT_OFF);
+// Exibir erros para debug no Render
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 header("Content-Type: application/json; charset=utf-8");
 
-$conn = @new mysqli("localhost", "root", "", "desenhos_antigos", 3308);
+// --- CONFIGURAÇÃO AIVEN (Ajuste a senha aqui) ---
+$host = "mysql-63c6648-streaming-desenhos.j.aivencloud.com";
+$port = 28840;
+$user = "avnadmin";
+$pass = "AVNS_y1R_KaHJC0qp4VAHb_k"; 
+$dbname = "defaultdb";
 
-if ($conn->connect_error) {
-    echo json_encode(["sucesso" => false, "erro" => "Erro de conexão"]);
+// Inicializa a conexão com SSL para o Aiven
+$conn = mysqli_init();
+mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
+$conectar = @mysqli_real_connect($conn, $host, $user, $pass, $dbname, $port, NULL, MYSQLI_CLIENT_SSL);
+
+if (!$conectar) {
+    echo json_encode(["sucesso" => false, "erro" => "Erro de conexão com o banco remoto"]);
     exit;
 }
+// ------------------------------------------------
 
 $id = $_POST["id"] ?? null;
 $nome = $_POST["nome"] ?? '';
 $ano = $_POST["ano"] ?? 0;
 $desc = $_POST["descricao"] ?? '';
-$video_url = $_POST["video_url"] ?? ''; // CAPTURA O VÍDEO
+$video_url = $_POST["video_url"] ?? ''; 
 $novaImagem = null;
 
 if (!$id) {
@@ -25,11 +39,11 @@ if (!$id) {
 if (!empty($_FILES["imagem"]["name"])) {
     $pasta = "../imagens/";
     
-    // Busca a imagem antiga para deletar o arquivo físico e economizar espaço
-    $res = $conn->query("SELECT imagem FROM desenhos WHERE id_desenho = " . (int)$id);
-    $antigo = $res->fetch_assoc();
+    // Busca a imagem antiga para deletar o arquivo físico
+    $res = mysqli_query($conn, "SELECT imagem FROM desenhos WHERE id_desenho = " . (int)$id);
+    $antigo = mysqli_fetch_assoc($res);
     if ($antigo && $antigo['imagem'] && file_exists($pasta . $antigo['imagem'])) {
-        unlink($pasta . $antigo['imagem']);
+        @unlink($pasta . $antigo['imagem']);
     }
 
     $ext = pathinfo($_FILES["imagem"]["name"], PATHINFO_EXTENSION);
@@ -57,3 +71,5 @@ echo json_encode([
 
 $stmt->close();
 $conn->close();
+?>
+
