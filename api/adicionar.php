@@ -13,8 +13,7 @@ $pass = "AVNS_y1R_KaHJC0qp4VAHb_k";
 $dbname = "defaultdb";
 
 // --- CONFIGURAÇÃO CLOUDINARY ---
-// Coloque o seu Cloud Name que aparece no Dashboard do Cloudinary aqui:
-$cloud_name = "SEU_CLOUD_NAME_AQUI"; 
+$cloud_name = "dkpy0ps8t"; 
 $upload_preset = "streaming-desenhos-antigos";
 
 // Inicializa a conexão com SSL (Aiven)
