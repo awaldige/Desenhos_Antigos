@@ -1,60 +1,64 @@
-# 📺 Desenhos Antigos — Streaming Retrô & Gestão ADM
+📺 Desenhos Antigos — Streaming Retrô & Cloud Architecture
+📖 Visão Geral
+Este é um projeto Full Stack que simula uma plataforma de streaming focada em desenhos clássicos. O sistema evoluiu de um ambiente local para uma arquitetura baseada em nuvem, utilizando integração entre múltiplas plataformas para garantir persistência de dados e alta disponibilidade de mídia.
 
-## 📖 Visão Geral
-Este é um projeto **Full Stack** que simula uma plataforma de streaming focada em desenhos clássicos. O sistema combina um banco de dados relacional robusto com uma interface moderna inspirada na Netflix, permitindo não apenas a visualização, mas também a gestão completa do catálogo.
+O projeto demonstra competências avançadas em CRUD, manipulação de APIs de terceiros, segurança SSL e armazenamento em nuvem.
 
-O projeto foi desenvolvido para demonstrar habilidades em **CRUD, integração de APIs de vídeo (YouTube), autenticação e design responsivo.**
+🏗️ Arquitetura do Projeto
+O sistema foi desenhado para operar de forma distribuída:
 
-## 🏗️ Estrutura do Projeto
-O repositório está organizado da seguinte forma:
+Frontend & Backend (Hospedagem): Render (Ambiente de execução PHP).
 
-### 🌐 Interface Frontend
-* **Design Moderno:** Layout escuro (Dark Mode) com foco em UX.
-* **Banner Dinâmico:** Destaque para o desenho selecionado com troca de fundo em tempo real.
-* **Player Integrado:** Reprodução direta de vídeos do YouTube ou arquivos locais via modal e banner.
+Banco de Dados Remoto: Aiven (Instância MySQL Gerenciada com conexão via SSL).
 
-### ⚙️ Backend & API
-* **PHP API:** Endpoints para listagem, cadastro, edição e exclusão de dados.
-* **Sistema de Login:** Área restrita para administradores gerenciarem o catálogo.
+Storage de Mídia (CDN): Cloudinary (Armazenamento permanente e otimização de imagens).
 
-### 🗄️ Banco de Dados (MySQL)
-Modelagem relacional completa incluindo:
-* **Desenhos:** Título, ano, sinopse e links de mídia.
-* **Gestão:** Tabelas de Criadores, Estúdios, Personagens e Usuários (ADM).
-* **Arquivo de exportação:** `banco.sql` (contém a estrutura e dados de exemplo).
+📊 Funcionalidades Implementadas
+[x] Arquitetura Cloud: Sistema hospedado e funcional em ambiente de produção.
 
-## 📊 Funcionalidades Implementadas
-- [x] **Catálogo Visual:** Cards interativos com capas e informações.
-- [x] **Player de Vídeo:** Assista ao desenho selecionado sem sair da página.
-- [x] **Painel Administrativo:** Interface protegida por login para gerenciar o conteúdo.
-- [x] **Busca em Tempo Real:** Filtro inteligente por nome ou descrição.
-- [x] **Upload de Imagens:** Suporte para capas personalizadas via formulário.
-- [x] **CRUD Completo:** Adicionar, editar e remover desenhos diretamente pela interface.
+[x] Persistência de Imagens: Integração com API do Cloudinary para evitar perda de arquivos em servidores efêmeros.
 
-## 🛠️ Tecnologias Utilizadas
-* **Frontend:** HTML5, CSS3 (Flexbox/Grid), JavaScript (ES6+).
-* **Backend:** PHP 8.x.
-* **Database:** MySQL (MariaDB).
-* **Ferramentas:** XAMPP, VS Code, Git/GitHub.
+[x] Banco de Dados Remoto: Conexão segura via TLS/SSL com MySQL externo.
 
-## 🧪 Como usar
-1. Clone este repositório.
-2. Importe o arquivo `banco.sql` no seu servidor MySQL (recomenda-se o uso do phpMyAdmin).
-3. Certifique-se de que a conexão no diretório `api/` está configurada corretamente (porta `3308` ou `3306`).
-4. Execute o projeto em um ambiente de servidor local (XAMPP, WAMP, etc.).
-5. Acesse `index.html` via `localhost`.
+[x] Painel Administrativo: Interface protegida para gestão em tempo real do catálogo.
 
-> **Credenciais de Teste (ADM):**
-> * **Usuário:** ``
-> * **Senha:** `` (ou conforme configurado no dump do banco).
+[x] Player de Vídeo Híbrido: Suporte para embeds do YouTube e arquivos MP4 diretos.
 
-## 🚀 Futuras Evoluções
-* Página individual para lista de episódios.
-* Categorização por gêneros (Ação, Comédia, Hanna-Barbera).
-* Sistema de "Favoritos" salvo no navegador.
+[x] Busca em Tempo Real: Filtro inteligente por nome ou descrição via JavaScript.
 
-## 🎯 Objetivo do Projeto
-Este projeto foi desenvolvido como peça de **portfólio**, demonstrando a capacidade de integrar um banco de dados relacional a uma interface web funcional e segura, resolvendo problemas reais de manipulação de dados e entrega de conteúdo multimídia.
+🛠️ Tecnologias Utilizadas
+Frontend: HTML5, CSS3 (Modern UI), JavaScript (ES6+ / Fetch API).
 
----
-© 2026 - Desenvolvido por André waldige
+Backend: PHP 8.x (Arquitetura de API JSON).
+
+Database: MySQL (Hospedado no Aiven).
+
+Cloud & Integrações: Cloudinary API (Imagens), cURL (PHP), Render (PaaS).
+
+🚀 Como o Projeto Funciona (Fluxo de Dados)
+O usuário ADM faz upload de uma capa e preenche os dados do desenho.
+
+O Backend PHP recebe a imagem e a envia via cURL para o Cloudinary.
+
+O Cloudinary processa e retorna uma URL segura (HTTPS).
+
+O PHP salva essa URL e os dados do desenho no banco Aiven.
+
+O Frontend consome a API e renderiza os cards utilizando as URLs otimizadas da CDN.
+
+🧪 Como usar
+Como o projeto está em produção, você pode acessá-lo diretamente pelo link:
+
+(https://streaming-desenhos-antigos.onrender.com/)
+
+Para rodar localmente:
+
+Clone este repositório.
+
+Configure as variáveis de conexão (Host, Porta, Senha SSL) em api/ para apontar para seu banco.
+
+Certifique-se de ter a extensão php-curl ativa para os uploads.
+
+Configure seu Cloud Name e Upload Preset nos arquivos de API.
+
+© 2026 - Desenvolvido por André Waldige
