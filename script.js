@@ -59,7 +59,7 @@ function aplicarPermissoes() {
     }
 }
 
-/* ===== 2. CARREGAMENTO E RENDERIZAÇÃO ===== */
+/* ===== 2. CARREGAMENTO E RENDERIZAÇÃO POR DÉCADAS ===== */
 
 async function carregarDesenhos() {
     try {
@@ -72,37 +72,77 @@ async function carregarDesenhos() {
 }
 
 function renderizarCards(desenhos) {
-    const lista = document.getElementById("lista");
-    lista.innerHTML = "";
-    desenhos.forEach((d) => {
-        const nomeNorm = d.nome.toLowerCase().trim();
-        
-        // --- AJUSTE CLOUDINARY ---
-        let capa = "";
-        if (d.imagem) {
-            // Se já for uma URL completa (Cloudinary), usa direto. Caso contrário, usa pasta local.
-            capa = d.imagem.startsWith("http") ? d.imagem : `imagens/${d.imagem}`;
-        } else {
-            // Fallback para capas padrão ou placeholder
-            capa = capasPadrao[nomeNorm] || `https://picsum.photos/seed/${d.id_desenho}/300/450`;
-        }
+    const mainContainer = document.getElementById("secoes-decadas");
+    mainContainer.innerHTML = "";
 
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-            <img src="${capa}" alt="${d.nome}">
-            <div class="info">
-                <h3>${d.nome}</h3>
-                <p>${d.ano_lancamento}</p>
-                <div class="acoes admin-only">
-                    <button onclick="event.stopPropagation(); editarDesenho(${d.id_desenho}, '${d.nome.replace(/'/g, "\\'")}', '${d.ano_lancamento}', '${(d.descricao || "").replace(/'/g, "\\'")}', '${d.video_url || ""}')">✏️</button>
-                    <button onclick="event.stopPropagation(); excluirDesenho(${d.id_desenho})">🗑️</button>
-                </div>
-            </div>
-        `;
-        card.onclick = () => atualizarBannerDinamico(d);
-        lista.appendChild(card);
+    if (desenhos.length === 0) {
+        mainContainer.innerHTML = "<p style='text-align:center; padding: 20px;'>Nenhum desenho encontrado.</p>";
+        return;
+    }
+
+    // 1. AGRUPAR POR DÉCADA
+    const grupos = {};
+    desenhos.forEach(d => {
+        const ano = parseInt(d.ano_lancamento);
+        const decada = Math.floor(ano / 10) * 10;
+        const tituloDecada = `Anos ${decada}`;
+
+        if (!grupos[tituloDecada]) {
+            grupos[tituloDecada] = [];
+        }
+        grupos[tituloDecada].push(d);
     });
+
+    // 2. ORDENAR DÉCADAS (Mais recentes primeiro)
+    const decadasOrdenadas = Object.keys(grupos).sort().reverse();
+
+    // 3. CRIAR ELEMENTOS VISUAIS
+    decadasOrdenadas.forEach(decada => {
+        // Criar título da categoria
+        const h2 = document.createElement("h2");
+        h2.className = "categoria";
+        h2.innerText = decada;
+        mainContainer.appendChild(h2);
+
+        // Criar a seção (fileira) para os cards
+        const section = document.createElement("section");
+        section.className = "linha";
+
+        grupos[decada].forEach(d => {
+            const card = criarCard(d);
+            section.appendChild(card);
+        });
+
+        mainContainer.appendChild(section);
+    });
+}
+
+// Função auxiliar para gerar o elemento do Card
+function criarCard(d) {
+    const nomeNorm = d.nome.toLowerCase().trim();
+    let capa = "";
+    
+    if (d.imagem) {
+        capa = d.imagem.startsWith("http") ? d.imagem : `imagens/${d.imagem}`;
+    } else {
+        capa = capasPadrao[nomeNorm] || `https://picsum.photos/seed/${d.id_desenho}/300/450`;
+    }
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+        <img src="${capa}" alt="${d.nome}" loading="lazy">
+        <div class="info">
+            <h3>${d.nome}</h3>
+            <p>${d.ano_lancamento}</p>
+            <div class="acoes admin-only">
+                <button onclick="event.stopPropagation(); editarDesenho(${d.id_desenho}, '${d.nome.replace(/'/g, "\\'")}', '${d.ano_lancamento}', '${(d.descricao || "").replace(/'/g, "\\'")}', '${d.video_url || ""}')">✏️</button>
+                <button onclick="event.stopPropagation(); excluirDesenho(${d.id_desenho})">🗑️</button>
+            </div>
+        </div>
+    `;
+    card.onclick = () => atualizarBannerDinamico(d);
+    return card;
 }
 
 function filtrarDesenhos() {
@@ -122,7 +162,6 @@ function atualizarBannerDinamico(d) {
 
     fecharVideo();
 
-    // --- AJUSTE CLOUDINARY ---
     let capa = "";
     if (d.imagem) {
         capa = d.imagem.startsWith("http") ? d.imagem : `imagens/${d.imagem}`;
@@ -224,7 +263,6 @@ document.getElementById("formDesenho").onsubmit = async (e) => {
     const idEdicao = document.getElementById("edit_id").value;
     const formData = new FormData(e.target);
     
-    // IMPORTANTE: Garantir que o nome do campo seja 'id' para o PHP
     if (idEdicao) formData.set("id", idEdicao);
 
     const url = idEdicao ? "api/editar.php" : "api/adicionar.php";
