@@ -15,7 +15,7 @@ body {
 
 /* ===== 2. CABEÇALHO ===== */
 header {
-    background: #000;
+    background: rgba(0, 0, 0, 0.9);
     padding: 15px 4%;
     position: sticky;
     top: 0;
@@ -49,7 +49,7 @@ header h1 {
 
 /* ===== 3. BANNER DINÂMICO & PLAYER ===== */
 #banner {
-    height: 75vh; /* Ocupa 75% da altura da tela */
+    height: 75vh;
     min-height: 400px;
     background-size: cover;
     background-position: center;
@@ -61,7 +61,6 @@ header h1 {
     background-color: #000;
 }
 
-/* Gradiente para escurecer o banner e destacar o texto */
 #banner::before {
     content: "";
     position: absolute;
@@ -93,25 +92,13 @@ header h1 {
     overflow: hidden;
 }
 
-/* Container que recebe o Iframe do YouTube */
 #player-container {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 5;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 20;
     background: #000;
 }
 
-#player-container iframe, 
-#player-container video {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-/* Botão de Assistir no Banner */
 #btnAssistir {
     background: #e50914;
     color: white;
@@ -121,7 +108,7 @@ header h1 {
     font-weight: bold;
     font-size: 1.1rem;
     cursor: pointer;
-    display: none; /* Controlado pelo JS */
+    display: none;
     align-items: center;
     gap: 10px;
     transition: transform 0.2s, background 0.2s;
@@ -137,7 +124,7 @@ header h1 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 30px 4%;
+    padding: 30px 4% 10px;
     gap: 20px;
 }
 
@@ -156,43 +143,57 @@ header h1 {
 
 #inputBusca:focus { border-color: #e50914; }
 
-#btnAbrirModal {
-    background: #e50914;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    white-space: nowrap;
-}
+/* ===== 5. ESTRUTURA DE FILEIRAS (STREAMING) ===== */
 
-/* ===== 5. GRID DE DESENHOS ===== */
+/* Estilização dos Títulos das Décadas */
 .categoria {
-    margin: 20px 4% 10px;
-    font-size: 1.5rem;
+    margin: 40px 4% 10px;
+    font-size: 1.6rem;
+    font-weight: bold;
     color: #e5e5e5;
+    border-left: 4px solid #e50914;
+    padding-left: 15px;
 }
 
-#lista {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
-    padding: 0 4% 40px;
+/* A mágica do Scroll Horizontal */
+.linha {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 15px;
+    padding: 15px 4% 30px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
+/* Customização da Barra de Rolagem */
+.linha::-webkit-scrollbar {
+    height: 6px;
+}
+
+.linha::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+
+.linha:hover::-webkit-scrollbar-thumb {
+    background: #e50914; /* Só fica vermelho ao passar o mouse na linha */
+}
+
+/* Estilização do Card para Fileira */
 .card {
+    flex: 0 0 200px; /* Não permite encolher e fixa em 200px */
     background: #1f1f1f;
-    border-radius: 4px;
+    border-radius: 6px;
     overflow: hidden;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
 }
 
 .card:hover { 
-    transform: scale(1.08); 
-    z-index: 2;
+    transform: scale(1.15); 
+    z-index: 10;
 }
 
 .card img {
@@ -203,32 +204,17 @@ header h1 {
 
 .card .info {
     padding: 10px;
-    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    background: linear-gradient(to top, rgba(0,0,0,1), transparent);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    opacity: 0.9;
 }
 
-.card h3 { font-size: 0.9rem; margin-bottom: 5px; }
-.card p { font-size: 0.8rem; color: #888; }
+.card h3 { font-size: 0.9rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card p { font-size: 0.8rem; color: #aaa; }
 
-.acoes { 
-    display: flex; 
-    gap: 5px; 
-    margin-top: 8px; 
-}
-
-.acoes button {
-    background: rgba(255,255,255,0.1);
-    border: none;
-    color: white;
-    padding: 6px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    flex: 1;
-}
-
-.acoes button:hover { background: rgba(255,255,255,0.2); }
-
-/* ===== 6. MODAIS ===== */
+/* ===== 6. MODAIS E CRUD ===== */
 .modal {
     display: none;
     position: fixed;
@@ -245,67 +231,18 @@ header h1 {
     width: 90%;
     max-width: 480px;
     border-radius: 10px;
-    position: relative;
     border: 1px solid #333;
     max-height: 90vh;
     overflow-y: auto;
 }
 
-/* Custom Scrollbar */
-.modal-content::-webkit-scrollbar { width: 8px; }
-.modal-content::-webkit-scrollbar-thumb { background: #e50914; border-radius: 4px; }
-
-.fechar {
-    position: absolute;
-    right: 20px; top: 15px;
-    font-size: 28px;
-    color: #666;
-    cursor: pointer;
-}
-
-/* ===== 7. FORMULÁRIOS ===== */
-.grupo-input {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-.grupo-input label {
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 5px;
-}
-
-input, textarea {
-    padding: 12px;
-    background: #2b2b2b;
-    border: 1px solid #444;
-    color: white;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-input:focus { border-color: #e50914; outline: none; }
-
-#btnEnviar {
-    background: #e50914;
-    color: white;
-    border: none;
-    padding: 14px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-/* ===== 8. UTILITÁRIOS E RESPONSIVO ===== */
 .admin-only { display: none !important; }
 body.is-admin .admin-only { display: flex !important; }
-body.is-admin button#btnAbrirModal.admin-only { display: block !important; }
 
+/* ===== 7. RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
     #banner { height: 50vh; }
     #banner-titulo { font-size: 2rem; }
-    .controles-container { flex-direction: column; }
-    #lista { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    .card { flex: 0 0 150px; } /* Cards menores em telas pequenas */
+    .categoria { font-size: 1.2rem; }
 }
