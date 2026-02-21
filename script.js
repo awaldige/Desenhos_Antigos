@@ -80,7 +80,6 @@ function renderizarCards(desenhos) {
         return;
     }
 
-    // 1. AGRUPAR POR DÉCADA
     const grupos = {};
     desenhos.forEach(d => {
         const ano = parseInt(d.ano_lancamento);
@@ -93,18 +92,14 @@ function renderizarCards(desenhos) {
         grupos[tituloDecada].push(d);
     });
 
-    // 2. ORDENAR DÉCADAS (Mais recentes primeiro)
     const decadasOrdenadas = Object.keys(grupos).sort().reverse();
 
-    // 3. CRIAR ELEMENTOS VISUAIS
     decadasOrdenadas.forEach(decada => {
-        // Criar título da categoria
         const h2 = document.createElement("h2");
         h2.className = "categoria";
         h2.innerText = decada;
         mainContainer.appendChild(h2);
 
-        // Criar a seção (fileira) para os cards
         const section = document.createElement("section");
         section.className = "linha";
 
@@ -117,7 +112,6 @@ function renderizarCards(desenhos) {
     });
 }
 
-// Função auxiliar para gerar o elemento do Card
 function criarCard(d) {
     const nomeNorm = d.nome.toLowerCase().trim();
     let capa = "";
@@ -136,13 +130,27 @@ function criarCard(d) {
             <h3>${d.nome}</h3>
             <p>${d.ano_lancamento}</p>
             <div class="acoes admin-only">
-                <button onclick="event.stopPropagation(); editarDesenho(${d.id_desenho}, '${d.nome.replace(/'/g, "\\'")}', '${d.ano_lancamento}', '${(d.descricao || "").replace(/'/g, "\\'")}', '${d.video_url || ""}')">✏️</button>
+                <button onclick="event.stopPropagation(); prepararEdicao(${d.id_desenho})">✏️</button>
                 <button onclick="event.stopPropagation(); excluirDesenho(${d.id_desenho})">🗑️</button>
             </div>
         </div>
     `;
     card.onclick = () => atualizarBannerDinamico(d);
     return card;
+}
+
+// NOVA FUNÇÃO: Busca os dados na lista original usando o ID para evitar erros de aspas
+function prepararEdicao(id) {
+    const desenho = listaOriginal.find(item => item.id_desenho == id);
+    if (desenho) {
+        editarDesenho(
+            desenho.id_desenho, 
+            desenho.nome, 
+            desenho.ano_lancamento, 
+            desenho.descricao || "", 
+            desenho.video_url || ""
+        );
+    }
 }
 
 function filtrarDesenhos() {
