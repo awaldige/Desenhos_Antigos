@@ -8,6 +8,8 @@
 </head>
 <body>
 
+<div id="toast" class="toast">Ação realizada com sucesso! ✅</div>
+
 <header>
     <h1>📺 Desenhos Antigos</h1>
     <div id="auth-controls">
@@ -33,6 +35,10 @@
     <section id="busca-container">
         <input type="text" id="inputBusca" placeholder="🔍 O que você quer assistir hoje?" oninput="filtrarDesenhos()">
     </section>
+    
+    <button id="btnAleatorio" onclick="assistirAlgoAleatorio()" title="Assistir algo aleatório">
+        🎲 Surpreenda-me
+    </button>
     
     <button id="btnAbrirModal" class="admin-only" onclick="abrirModal()">➕ Novo Desenho</button>
 </div>
@@ -102,7 +108,7 @@
 </div>
 
 <main id="secoes-decadas">
-    </main>
+</main>
 
 <footer style="text-align: center; padding: 40px; color: #555; font-size: 0.9rem;">
     <p>&copy; 2026 Desenhos Antigos Streaming - Todos os direitos reservados.</p>
