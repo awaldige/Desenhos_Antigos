@@ -37,6 +37,7 @@ document.getElementById("formLogin").onsubmit = async (e) => {
             document.getElementById("btnLogar").style.display = "none";
             document.getElementById("btnSair").style.display = "block";
             renderizarCards(listaOriginal);
+            mostrarNotificacao("Bem-vindo, Administrador! 🔓");
         } else {
             alert(dados.erro);
         }
@@ -49,6 +50,7 @@ function fazerLogout() {
     document.getElementById("btnLogar").style.display = "block";
     document.getElementById("btnSair").style.display = "none";
     renderizarCards(listaOriginal);
+    mostrarNotificacao("Sessão encerrada.");
 }
 
 function aplicarPermissoes() {
@@ -139,7 +141,6 @@ function criarCard(d) {
     return card;
 }
 
-// NOVA FUNÇÃO: Busca os dados na lista original usando o ID para evitar erros de aspas
 function prepararEdicao(id) {
     const desenho = listaOriginal.find(item => item.id_desenho == id);
     if (desenho) {
@@ -161,7 +162,7 @@ function filtrarDesenhos() {
     renderizarCards(filtrados);
 }
 
-/* ===== 3. PLAYER DE VÍDEO (BANNER) ===== */
+/* ===== 3. PLAYER E MODO ALEATÓRIO ===== */
 
 function atualizarBannerDinamico(d) {
     const banner = document.getElementById("banner");
@@ -184,6 +185,19 @@ function atualizarBannerDinamico(d) {
 
     videoAtual = d.video_url || "";
     btnAssistir.style.display = videoAtual ? "block" : "none";
+}
+
+function assistirAlgoAleatorio() {
+    if (listaOriginal.length === 0) return;
+    const sorteado = listaOriginal[Math.floor(Math.random() * listaOriginal.length)];
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    atualizarBannerDinamico(sorteado);
+
+    setTimeout(() => {
+        iniciarVideo();
+        mostrarNotificacao(`🎲 Sintonizando: ${sorteado.nome}`);
+    }, 800);
 }
 
 function iniciarVideo() {
@@ -270,7 +284,6 @@ document.getElementById("formDesenho").onsubmit = async (e) => {
 
     const idEdicao = document.getElementById("edit_id").value;
     const formData = new FormData(e.target);
-    
     if (idEdicao) formData.set("id", idEdicao);
 
     const url = idEdicao ? "api/editar.php" : "api/adicionar.php";
@@ -280,13 +293,14 @@ document.getElementById("formDesenho").onsubmit = async (e) => {
         if (dados.sucesso) { 
             fecharModal(); 
             carregarDesenhos(); 
+            mostrarNotificacao(idEdicao ? "Desenho atualizado com sucesso! ✨" : "Novo desenho adicionado! 🎬");
         } else { 
             alert("Erro: " + dados.erro); 
         }
     } catch (erro) { alert("Erro na conexão."); }
 };
 
-/* ===== 5. EXCLUSÃO E INICIALIZAÇÃO ===== */
+/* ===== 5. EXCLUSÃO E UTILITÁRIOS ===== */
 
 async function excluirDesenho(id) {
     if(!usuarioLogado.isAdmin || !confirm("Excluir este desenho?")) return;
@@ -294,8 +308,19 @@ async function excluirDesenho(id) {
     try {
         const res = await fetch("api/excluir.php", { method: "POST", body: fd });
         const dados = await res.json();
-        if (dados.sucesso) { carregarDesenhos(); }
+        if (dados.sucesso) { 
+            carregarDesenhos(); 
+            mostrarNotificacao("Desenho removido do catálogo. 🗑️");
+        }
     } catch (erro) { alert("Erro ao excluir."); }
+}
+
+function mostrarNotificacao(msg) {
+    const toast = document.getElementById("toast");
+    toast.innerText = msg;
+    toast.style.display = "block";
+    // Oculta após 3 segundos (tempo da animação CSS)
+    setTimeout(() => { toast.style.display = "none"; }, 3000);
 }
 
 window.onclick = (e) => { 
